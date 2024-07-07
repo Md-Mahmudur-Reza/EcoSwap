@@ -1,0 +1,13 @@
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title %}Item
+Details{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/item_details.css' %}" />
+{% endblock %} {% block content %}
+<div class="item-detail-container">
+  <h1>{{ item.item_name }}</h1>
+  <p><strong>Owner:</strong> {{ item.user.username }}</p>
+  <p><strong>Description:</strong> {{ item.item_description }}</p>
+  <p><strong>Condition:</strong> {{ item.item_condition }}</p>
+  <p><strong>Value:</strong> ${{ item.item_value }}</p>
+  <p><strong>Created At:</strong> {{ item.created_at }}</p>
+</div>
+{% endblock %}

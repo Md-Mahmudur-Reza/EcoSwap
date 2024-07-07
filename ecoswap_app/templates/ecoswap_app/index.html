@@ -1,4 +1,17 @@
 {% extends "ecoswap_app/base.html" %} {% load static %} {% block title %} Index
 Page {%endblock %} {% block additionalStyles %}
-<link rel="stylesheet" href="{% static 'index.css' %}" />
-{% endblock %} {% block content%} Home page{% endblock content %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/index.css' %}" />
+{% endblock %} {% block content %}
+<h1>Home Page</h1>
+<h2>Items:</h2>
+<div class="item-container">
+  {% for item in items %}
+  <a href="/item/{{item.id}}" class="item-link">
+  <div class="item-box">
+    <p><strong>Owner:</strong> {{ item.user.username }}</p>
+    <p><strong>Item Name:</strong> {{ item.item_name }}</p>
+    <p><strong>Condition:</strong> {{ item.item_condition }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
