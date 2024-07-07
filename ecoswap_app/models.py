@@ -75,6 +75,9 @@ class Exchange(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return (str(self.offered_by_user) + " - " + str(self.offered_item))
+
 # Transaction model
 class Transaction(models.Model):
     exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
