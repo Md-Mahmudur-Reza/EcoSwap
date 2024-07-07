@@ -4,6 +4,10 @@ Page {%endblock %} {% block additionalStyles %}
 {% endblock %} {% block content %}
 <h1>Home Page</h1>
 <h2>Items:</h2>
+<form method="GET" action="{% url 'ecoswap_app:index' %}">
+    <input type="text" name="q" placeholder="Search by item name" value="{{ query|default:'' }}">
+    <button type="submit">Search</button>
+</form>
 <div class="item-container">
   {% for item in items %}
   <a href="/item/{{item.id}}" class="item-link">

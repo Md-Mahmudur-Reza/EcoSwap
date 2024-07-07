@@ -10,6 +10,33 @@ h2 {
   text-align: center;
   color: #333;
 }
+form {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+form input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  width: 300px;
+}
+
+form button {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
 
 .item-container {
   display: flex;
