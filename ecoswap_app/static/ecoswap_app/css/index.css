@@ -10,39 +10,87 @@ h2 {
   text-align: center;
   color: #333;
 }
-form {
+
+.container {
   display: flex;
   justify-content: center;
   margin: 20px;
 }
 
-form input[type="text"] {
+.sidebar {
+  flex: 1;
+  max-width: 200px;
+  margin-right: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.sidebar h2,
+.sidebar h3 {
+  text-align: left;
+}
+
+.sidebar form {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar input[type="text"] {
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px 0 0 4px;
-  width: 300px;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 
-form button {
+.sidebar button {
   padding: 10px;
   font-size: 16px;
   border: 1px solid #007bff;
   background-color: #007bff;
   color: #fff;
-  border-radius: 0 4px 4px 0;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-form button:hover {
+.sidebar button:hover {
   background-color: #0056b3;
+}
+
+.sidebar hr {
+  margin: 20px 0;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.sidebar ul li a strong {
+  color: #000;
+}
+
+.content {
+  flex: 3;
+  max-width: 800px;
 }
 
 .item-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 20px;
 }
 
 .item-box {
@@ -64,6 +112,19 @@ form button:hover {
 }
 
 @media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
   .item-box {
     width: 90%;
   }

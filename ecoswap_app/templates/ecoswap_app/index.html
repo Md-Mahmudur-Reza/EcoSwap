@@ -3,19 +3,51 @@ Page {%endblock %} {% block additionalStyles %}
 <link rel="stylesheet" href="{% static 'ecoswap_app/css/index.css' %}" />
 {% endblock %} {% block content %}
 <h1>Home Page</h1>
-<h2>Items:</h2>
-<form method="GET" action="{% url 'ecoswap_app:index' %}">
-    <input type="text" name="q" placeholder="Search by item name" value="{{ query|default:'' }}">
-    <button type="submit">Search</button>
-</form>
-<div class="item-container">
-  {% for item in items %}
-  <a href="/item/{{item.id}}" class="item-link">
-  <div class="item-box">
-    <p><strong>Owner:</strong> {{ item.user.username }}</p>
-    <p><strong>Item Name:</strong> {{ item.item_name }}</p>
-    <p><strong>Condition:</strong> {{ item.item_condition }}</p>
+<div class="container">
+  <div class="sidebar">
+    <h2>Filter by Category</h2>
+    <form method="GET" action="{% url 'ecoswap_app:index' %}">
+      <input
+        type="text"
+        name="q"
+        placeholder="Search by item name"
+        value="{{ query|default:'' }}"
+      />
+      <button type="submit">Search</button>
+      <hr />
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="{% url 'ecoswap_app:index' %}">All Categories</a></li>
+        {% for category in categories %}
+        <li>
+          <a
+            href="{% url 'ecoswap_app:index' %}?category={{ category.id }}&q={{ query|default:'' }}"
+          >
+            {% if selected_category == category.id %}
+            <strong>{{ category.name }}</strong>
+            {% else %} {{ category.name }} {% endif %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </form>
   </div>
-  {% endfor %}
+  <div class="content">
+    <h2>Items:</h2>
+    <div class="item-container">
+      {% for item in items %}
+      <a href="{% url 'ecoswap_app:item_detail' item.id %}" class="item-link">
+        <div class="item-box">
+          <p><strong>Owner:</strong> {{ item.user.username }}</p>
+          <p><strong>Item Name:</strong> {{ item.item_name }}</p>
+          <p><strong>Description:</strong> {{ item.item_description }}</p>
+          <p><strong>Condition:</strong> {{ item.item_condition }}</p>
+          <p><strong>Value:</strong> ${{ item.item_value }}</p>
+          <p><strong>Created At:</strong> {{ item.created_at }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}
