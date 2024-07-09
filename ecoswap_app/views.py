@@ -84,6 +84,15 @@ def update_item(request, item_id):
         form = ItemForm(instance=item)
     return render(request, 'ecoswap_app/update_item.html', {'form': form, 'item': item})
 
+@login_required(login_url='ecoswap_app:login')
+def delete_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id, user=request.user)
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, 'Item deleted successfully.')
+        return redirect('ecoswap_app:user_items')  # Redirect to the user's items page
+    return render(request, 'ecoswap_app/confirm_delete.html', {'item': item})
+
 # User authentication and athorization
 def register(request):
     if request.method == 'POST':
