@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import User, Item, Exchange, Transaction, Message
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib.auth import logout
 from django.contrib import messages
 
@@ -48,7 +48,23 @@ def item_detail(request, item_id):
     context = {'item': item}
     return render(request, 'ecoswap_app/item_details.html', context)
 
+@login_required(login_url='ecoswap_app:login')
+def create_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            messages.success(request, 'Item created successfully.')
+            return redirect('ecoswap_app:item_detail', item_id=item.id)    # Redirect to a page showing the list of items or item details
+    else:
+        form = ItemForm()
+    return render(request, 'ecoswap_app/create_item.html', {'form': form})
 
+
+
+# User authentication and athorization
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
