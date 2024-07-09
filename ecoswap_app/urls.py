@@ -16,5 +16,5 @@ urlpatterns = [
 
     path('item_detail/<int:item_id>/', views.item_detail, name='item_detail'),
     path('create_item/', views.create_item, name='create_item'),
-
+    path('my_items/', views.user_items, name='user_items'),
 ]

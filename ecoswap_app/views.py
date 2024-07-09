@@ -48,6 +48,14 @@ def item_detail(request, item_id):
     context = {'item': item}
     return render(request, 'ecoswap_app/item_details.html', context)
 
+
+@login_required(login_url='ecoswap_app:login')
+def user_items(request):
+    items = Item.objects.filter(user=request.user).order_by('-created_at')
+    context = {'items': items}
+    return render(request, 'ecoswap_app/user_items.html', context)
+
+
 @login_required(login_url='ecoswap_app:login')
 def create_item(request):
     if request.method == 'POST':

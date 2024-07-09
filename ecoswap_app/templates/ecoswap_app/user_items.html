@@ -1,0 +1,23 @@
+<!-- ecoswap_app/templates/ecoswap_app/user_items.html -->
+
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title %} My
+Items{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/user_items.css' %}" />
+{% endblock %} {% block content %}
+<div class="items-container">
+  <h2>My Items</h2>
+  {% for item in items %}
+  <div class="item-box">
+    <h3>{{ item.item_name }}</h3>
+    <p><strong>Category:</strong> {{ item.item_category }}</p>
+    <p><strong>Condition:</strong> {{ item.item_condition }}</p>
+    <p><strong>Value:</strong> ${{ item.item_value }}</p>
+    <p><strong>Description:</strong> {{ item.item_description }}</p>
+    <p><strong>Created at:</strong> {{ item.created_at }}</p>
+    <a href="{% url 'ecoswap_app:item_detail' item.id %}">View Details</a>
+  </div>
+  {% empty %}
+  <p>You have not created any items yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}
