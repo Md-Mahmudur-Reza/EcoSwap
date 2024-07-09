@@ -12,6 +12,7 @@ Details{% endblock %} {% block additionalStyles %}
 
   {% if user == item.user %}
   <a href="{% url 'ecoswap_app:update_item' item.id %}">Edit Item</a>
+      <a href="{% url 'ecoswap_app:delete_item' item.id %}">Delete Item</a>
   {% endif %}
 </div>
 {% endblock %}
