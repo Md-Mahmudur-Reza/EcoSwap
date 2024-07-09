@@ -1,0 +1,11 @@
+<!-- ecoswap_app/templates/ecoswap_app/profile.html -->
+
+{% extends "ecoswap_app/base.html" %} {% block title %}Profile{% endblock %}
+{%block content %}
+<h2>Profile</h2>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Phone Number: {{ user.phone_number }}</p>
+<p>Address: {{ user.address }}</p>
+<p>Joined on: {{ user.created_at }}</p>
+{% endblock %}

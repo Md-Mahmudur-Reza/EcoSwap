@@ -1,6 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import User, Item, Exchange, Transaction, Message
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from django.contrib.auth import logout
+from django.contrib import messages
 
 CATEGORIES = [
     {'id': 1, 'name': 'Vehicle'},
@@ -38,8 +43,44 @@ def index(request):
     return render(request, 'ecoswap_app/index.html', context)
 
 
-
 def item_detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     context = {'item': item}
     return render(request, 'ecoswap_app/item_details.html', context)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('ecoswap_app:index')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'ecoswap_app/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('ecoswap_app:index')
+    else:
+        form = CustomAuthenticationForm()
+    return render(request, 'ecoswap_app/login.html', {'form': form})
+
+@login_required(login_url='ecoswap_app:login')
+def profile(request):
+    if not request.user.is_authenticated:
+        messages.info(request, "You need to log in to view your profile.")
+        return redirect('ecoswap_app:login')
+    return render(request, 'ecoswap_app/profile.html', {'user': request.user})
+
+def user_logout(request):
+    logout(request)
+    return redirect('ecoswap_app:login')

@@ -9,6 +9,25 @@
     {% block additionalStyles %}{% endblock %}
   </head>
   <body>
-    Eco swap {% block content%} {% endblock content %}
+    <div class="header">
+      <h1><a class="logo" href="{% url 'ecoswap_app:index' %}">Eco Swap</a></h1>
+      <div class="user-info">
+        {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <a href="{% url 'ecoswap_app:profile' %}">Profile</a>
+        <a href="{% url 'ecoswap_app:logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'ecoswap_app:login' %}">Login</a>
+        <a href="{% url 'ecoswap_app:register' %}">Register</a>
+        {% endif %}
+      </div>
+    </div>
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %} {% block content %}{% endblock %}
   </body>
 </html>
