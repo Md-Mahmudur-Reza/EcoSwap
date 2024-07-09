@@ -71,6 +71,18 @@ def create_item(request):
     return render(request, 'ecoswap_app/create_item.html', {'form': form})
 
 
+@login_required(login_url='ecoswap_app:login')
+def update_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id, user=request.user)
+    if request.method == 'POST':
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Item updated successfully.')
+            return redirect('ecoswap_app:item_detail', item_id=item.id)
+    else:
+        form = ItemForm(instance=item)
+    return render(request, 'ecoswap_app/update_item.html', {'form': form, 'item': item})
 
 # User authentication and athorization
 def register(request):

@@ -9,5 +9,9 @@ Details{% endblock %} {% block additionalStyles %}
   <p><strong>Condition:</strong> {{ item.item_condition }}</p>
   <p><strong>Value:</strong> ${{ item.item_value }}</p>
   <p><strong>Created At:</strong> {{ item.created_at }}</p>
+
+  {% if user == item.user %}
+  <a href="{% url 'ecoswap_app:update_item' item.id %}">Edit Item</a>
+  {% endif %}
 </div>
 {% endblock %}
