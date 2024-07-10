@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Item, Exchange, Transaction, Message
-from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm, ExchangeForm
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -92,6 +92,35 @@ def delete_item(request, item_id):
         messages.success(request, 'Item deleted successfully.')
         return redirect('ecoswap_app:user_items')  # Redirect to the user's items page
     return render(request, 'ecoswap_app/confirm_delete.html', {'item': item})
+
+
+@login_required(login_url='ecoswap_app:login')
+def request_exchange(request, item_id):
+    requested_item = get_object_or_404(Item, id=item_id)
+    if requested_item.user == request.user:
+        messages.error(request, "You cannot request your own item.")
+        return redirect('item_detail', item_id=item_id)
+    
+    if request.method == 'POST':
+        form = ExchangeForm(request.POST, user=request.user)
+        if form.is_valid():
+            exchange = form.save(commit=False)
+            exchange.requested_item = requested_item
+            exchange.offered_by_user = request.user
+            exchange.requested_by_user = requested_item.user
+            exchange.save()
+            messages.success(request, 'Exchange request sent successfully.')
+            return redirect('ecoswap_app:item_detail', item_id=item_id)
+    else:
+        form = ExchangeForm(user=request.user)
+    
+    context = {
+        'form': form,
+        'requested_item': requested_item
+    }
+    return render(request, 'ecoswap_app/request_exchange.html', context)
+
+
 
 # User authentication and athorization
 def register(request):

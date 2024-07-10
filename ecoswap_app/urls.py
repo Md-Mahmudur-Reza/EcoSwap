@@ -19,4 +19,7 @@ urlpatterns = [
     path('item/<int:item_id>/update/', views.update_item, name='update_item'),
     path('item/<int:item_id>/delete/', views.delete_item, name='delete_item'),
     path('my_items/', views.user_items, name='user_items'),
+
+    path('item/<int:item_id>/request_exchange/', views.request_exchange, name='request_exchange'),
+
 ]

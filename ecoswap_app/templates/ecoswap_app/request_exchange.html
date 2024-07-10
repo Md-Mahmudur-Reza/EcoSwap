@@ -1,0 +1,13 @@
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title %}Request
+Exchange{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/form.css' %}" />
+{% endblock %} {% block content %}
+<div class="form-container">
+  <h2>Request Exchange</h2>
+  <p><strong>Requesting item:</strong> {{ requested_item.item_name }}</p>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Send Exchange Request</button>
+  </form>
+</div>
+{% endblock %}

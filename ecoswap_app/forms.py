@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Item
+from .models import User, Item, Exchange
 
 class CustomUserCreationForm(UserCreationForm):
     phone_number = forms.CharField(required=False)
@@ -25,3 +25,15 @@ class ItemForm(forms.ModelForm):
         widgets = {
             'item_description': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
         }
+
+
+class ExchangeForm(forms.ModelForm):
+    class Meta:
+        model = Exchange
+        fields = ['offered_item']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ExchangeForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['offered_item'].queryset = Item.objects.filter(user=user)
