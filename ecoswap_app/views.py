@@ -158,3 +158,16 @@ def profile(request):
 def user_logout(request):
     logout(request)
     return redirect('ecoswap_app:login')
+
+
+@login_required(login_url='ecoswap_app:login')
+def user_exchange_requests(request):
+    received_requests = Exchange.objects.filter(requested_by_user=request.user, status='Pending')
+    context = {'received_requests': received_requests}
+    return render(request, 'ecoswap_app/user_exchange_requests.html', context)
+
+@login_required(login_url='ecoswap_app:login')
+def all_accepted_request(request):
+    accepted_requests = Exchange.objects.filter(requested_by_user=request.user, status='Accepted')
+    context = {'accepted_requests': accepted_requests}
+    return render(request, 'ecoswap_app/all_accepted_request.html', context)

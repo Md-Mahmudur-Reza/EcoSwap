@@ -21,5 +21,7 @@ urlpatterns = [
     path('my_items/', views.user_items, name='user_items'),
 
     path('item/<int:item_id>/request_exchange/', views.request_exchange, name='request_exchange'),
+    path('all_accepted_request/', views.all_accepted_request, name='all_accepted_request'),
+    path('exchange_requests/', views.user_exchange_requests, name='user_exchange_requests'),
 
 ]

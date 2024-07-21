@@ -1,0 +1,24 @@
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title %}My
+Accepted Requests{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/requests.css' %}" />
+{% endblock %} {% block content %}
+<div class="requests-container">
+  <h2>Accepted Requests</h2>
+  <ul>
+    {% for request in accepted_requests %}
+    <li>
+      <strong>{{ request.offered_by_user.username }}</strong> offered
+      <strong>{{ request.offered_item.item_name }}</strong> for your
+      <strong>{{ request.requested_item.item_name }}</strong>
+      <a href="{% url 'ecoswap_app:item_detail' request.offered_item.id %}"
+        >View Item</a
+      >
+
+      {% empty %}
+    </li>
+
+    <li>No accepted requests.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
