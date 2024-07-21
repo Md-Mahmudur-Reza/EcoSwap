@@ -1,0 +1,20 @@
+{% extends "ecoswap_app/base.html" %}
+{% load static %}
+{% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/send_message.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="message-container">
+  <div>
+    <h2>Send Message</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

@@ -7,6 +7,8 @@
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 5px;
+
+
 }
 
 .form-container h2 {
@@ -35,3 +37,4 @@
 .form-container form button:hover {
   background-color: #45a049;
 }
+

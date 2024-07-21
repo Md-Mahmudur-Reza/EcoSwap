@@ -19,7 +19,9 @@ urlpatterns = [
     path('item/<int:item_id>/update/', views.update_item, name='update_item'),
     path('item/<int:item_id>/delete/', views.delete_item, name='delete_item'),
     path('my_items/', views.user_items, name='user_items'),
-
+    path('messages/', views.message_list, name='message_list'),
+    path('messages/send/<int:exchange_id>/', views.send_message, name='send_message'),
+    path('exchanges/', views.exchange_list, name='exchange_list'),
     path('item/<int:item_id>/request_exchange/', views.request_exchange, name='request_exchange'),
     path('all_accepted_request/', views.all_accepted_request, name='all_accepted_request'),
     path('exchange_requests/', views.user_exchange_requests, name='user_exchange_requests'),

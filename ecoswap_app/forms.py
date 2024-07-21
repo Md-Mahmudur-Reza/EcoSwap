@@ -4,6 +4,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User, Item, Exchange
 
+#chatbox
+from .models import Message
+
 class CustomUserCreationForm(UserCreationForm):
     phone_number = forms.CharField(required=False)
     address = forms.CharField(widget=forms.Textarea, required=False)
@@ -37,3 +40,14 @@ class ExchangeForm(forms.ModelForm):
         super(ExchangeForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['offered_item'].queryset = Item.objects.filter(user=user)
+
+ # chatbox
+
+
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['receiver_user', 'message_text']
+

@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from .models import User, Item, Exchange, Transaction, Message
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm, ExchangeForm
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
-from django.urls import reverse
+#chatbox
+from django.contrib.auth import get_user_model
+from .models import Exchange, Message
+from .forms import MessageForm
+
 
 CATEGORIES = [
     {'id': 1, 'name': 'Vehicle'},
@@ -121,6 +125,36 @@ def request_exchange(request, item_id):
     }
     return render(request, 'ecoswap_app/request_exchange.html', context)
 
+# chatbox
+
+User = get_user_model()
+
+@login_required
+def message_list(request):
+    messages = Message.objects.filter(receiver_user=request.user).order_by('-sent_at')
+    return render(request, 'ecoswap_app/message_list.html', {'messages': messages})
+
+@login_required
+def send_message(request, exchange_id):
+    exchange = get_object_or_404(Exchange, id=exchange_id)
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender_user = request.user
+            message.exchange = exchange
+            message.save()
+            return redirect('ecoswap_app:message_list')
+    else:
+        form = MessageForm()
+    return render(request, 'ecoswap_app/send_message.html', {'form': form, 'exchange': exchange})
+
+
+@login_required
+def exchange_list(request):
+    exchanges = Exchange.objects.filter(offered_by_user=request.user) | Exchange.objects.filter(requested_by_user=request.user)
+    return render(request, 'ecoswap_app/exchange_list.html', {'exchanges': exchanges})
+
 
 
 # User authentication and athorization
@@ -159,45 +193,3 @@ def profile(request):
 def user_logout(request):
     logout(request)
     return redirect('ecoswap_app:login')
-
-
-@login_required(login_url='ecoswap_app:login')
-def user_exchange_requests(request):
-    received_requests = Exchange.objects.filter(requested_by_user=request.user, status='Pending')
-    context = {'received_requests': received_requests}
-    return render(request, 'ecoswap_app/user_exchange_requests.html', context)
-
-@login_required(login_url='ecoswap_app:login')
-def all_accepted_request(request):
-    accepted_requests = Exchange.objects.filter(requested_by_user=request.user, status='Accepted')
-    context = {'accepted_requests': accepted_requests}
-    return render(request, 'ecoswap_app/all_accepted_request.html', context)
-
-@login_required(login_url='ecoswap_app:login')
-def accept_request(request, exchange_id):
-    exchange = get_object_or_404(Exchange, id=exchange_id, requested_by_user=request.user)
-    if exchange.status == 'Pending':
-        exchange.status = 'Accepted'
-        exchange.offered_item.item_status = 'Pending'
-        exchange.requested_item.item_status = 'Pending'
-        exchange.save()
-        messages.success(request, 'Exchange request accepted. Please complete the transaction details.')
-        return redirect(reverse('ecoswap_app:create_transaction', args=[exchange.id]))
-    else:
-        messages.error(request, 'Cannot accept this exchange request.')
-    return redirect('ecoswap_app:user_exchange_requests')
-
-@login_required(login_url='ecoswap_app:login')
-def reject_request(request, exchange_id):
-    exchange = get_object_or_404(Exchange, id=exchange_id, requested_by_user=request.user)
-    if exchange.status == 'Pending':
-        exchange.status = 'Rejected'
-        exchange.offered_item.item_status = 'Available'
-        exchange.requested_item.item_status = 'Available'
-        exchange.offered_item.save()
-        exchange.requested_item.save()
-        exchange.save()
-        messages.success(request, 'Exchange request rejected.')
-    else:
-        messages.error(request, 'Cannot reject this exchange request.')
-    return redirect('ecoswap_app:user_exchange_requests')

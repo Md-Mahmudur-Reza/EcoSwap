@@ -1,0 +1,82 @@
+/* messages.css */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container */
+.container {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+h2 {
+    color: #333;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Message List */
+ul.message-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Message Item */
+ul.message-list li {
+    background-color: #e9e9ef;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+ul.message-list li strong {
+    color: #555;
+    display: block;
+}
+
+ul.message-list li em {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+    font-size: 12px;
+    text-align: right;
+}
+
+ul.message-list li:nth-child(odd) {
+    background-color: #f7f7fb;
+}
+
+/* Scrollbar */
+ul.message-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+ul.message-list::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+ul.message-list::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}

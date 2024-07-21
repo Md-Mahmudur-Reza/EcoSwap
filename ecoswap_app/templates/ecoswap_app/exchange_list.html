@@ -1,0 +1,13 @@
+{% extends "ecoswap_app/base.html" %}
+
+{% block content %}
+  <h2>Your Exchanges</h2>
+  <ul>
+    {% for exchange in exchanges %}
+      <li>
+        Exchange ID: {{ exchange.id }}
+        <a href="{% url 'send_message' exchange.id %}">Send Message</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
