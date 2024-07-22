@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Item, Exchange
+from .models import User, Item, Exchange, Transaction
 
 #chatbox
 from .models import Message
@@ -14,6 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'phone_number', 'address', 'password1', 'password2')
+
 
 class CustomAuthenticationForm(AuthenticationForm):
     class Meta:
@@ -39,15 +40,18 @@ class ExchangeForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super(ExchangeForm, self).__init__(*args, **kwargs)
         if user:
-            self.fields['offered_item'].queryset = Item.objects.filter(user=user)
+            self.fields['offered_item'].queryset = Item.objects.filter(user=user, item_status='Available')
+
 
  # chatbox
-
-
-
-
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['receiver_user', 'message_text']
+
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['amount', 'paid_by_user', 'received_by_user']
 

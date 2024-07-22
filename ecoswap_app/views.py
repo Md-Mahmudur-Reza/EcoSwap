@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Item, Exchange, Transaction, Message
-from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm, ExchangeForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm, ExchangeForm, TransactionForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from .models import Exchange, Message
 from .forms import MessageForm
 
+from django.urls import reverse
 
 CATEGORIES = [
     {'id': 1, 'name': 'Vehicle'},
@@ -193,3 +194,103 @@ def profile(request):
 def user_logout(request):
     logout(request)
     return redirect('ecoswap_app:login')
+
+
+@login_required(login_url='ecoswap_app:login')
+def user_exchange_requests(request):
+    received_requests = Exchange.objects.filter(requested_by_user=request.user, status='Pending')
+    context = {'received_requests': received_requests}
+    return render(request, 'ecoswap_app/user_exchange_requests.html', context)
+
+@login_required(login_url='ecoswap_app:login')
+def all_accepted_request(request):
+    accepted_requests = Exchange.objects.filter(requested_by_user=request.user, status='Accepted')
+    context = {'accepted_requests': accepted_requests}
+    return render(request, 'ecoswap_app/all_accepted_request.html', context)
+
+@login_required(login_url='ecoswap_app:login')
+def accept_request(request, exchange_id):
+    exchange = get_object_or_404(Exchange, id=exchange_id, requested_by_user=request.user)
+    if exchange.status == 'Pending':
+        exchange.status = 'Accepted'
+        exchange.offered_item.item_status = 'Pending'
+        exchange.requested_item.item_status = 'Pending'
+        exchange.save()
+        messages.success(request, 'Exchange request accepted. Please complete the transaction details.')
+        return redirect(reverse('ecoswap_app:create_transaction', args=[exchange.id]))
+    else:
+        messages.error(request, 'Cannot accept this exchange request.')
+    return redirect('ecoswap_app:user_exchange_requests')
+
+@login_required(login_url='ecoswap_app:login')
+def reject_request(request, exchange_id):
+    exchange = get_object_or_404(Exchange, id=exchange_id, requested_by_user=request.user)
+    if exchange.status == 'Pending':
+        exchange.status = 'Rejected'
+        exchange.offered_item.item_status = 'Available'
+        exchange.requested_item.item_status = 'Available'
+        exchange.offered_item.save()
+        exchange.requested_item.save()
+        exchange.save()
+        messages.success(request, 'Exchange request rejected.')
+    else:
+        messages.error(request, 'Cannot reject this exchange request.')
+    return redirect('ecoswap_app:user_exchange_requests')
+
+
+
+@login_required(login_url='ecoswap_app:login')
+def request_exchange(request, item_id):
+    requested_item = get_object_or_404(Item, id=item_id)
+    if requested_item.user == request.user:
+        messages.error(request, "You cannot request your own item.")
+        return redirect('item_detail', item_id=item_id)
+
+    if request.method == 'POST':
+        form = ExchangeForm(request.POST, user=request.user)
+        if form.is_valid():
+            exchange = form.save(commit=False)
+            exchange.requested_item = requested_item
+            exchange.offered_by_user = request.user
+            exchange.requested_by_user = requested_item.user
+            exchange.save()
+            messages.success(request, 'Exchange request sent successfully.')
+            return redirect('ecoswap_app:item_detail', item_id=item_id)
+    else:
+        form = ExchangeForm(user=request.user)
+
+    context = {
+        'form': form,
+        'requested_item': requested_item
+    }
+    return render(request, 'ecoswap_app/request_exchange.html', context)
+
+
+@login_required(login_url='ecoswap_app:login')
+def create_transaction(request, exchange_id):
+    exchange = get_object_or_404(Exchange, id=exchange_id)
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.exchange = exchange
+            transaction.save()
+
+            # Mark the items as exchanged
+            exchange.offered_item.item_status = 'Exchanged'
+            exchange.offered_item.save()
+            exchange.requested_item.item_status = 'Exchanged'
+            exchange.requested_item.save()
+
+            # Update exchange status
+            exchange.status = 'Completed'
+            exchange.save()
+
+            messages.success(request, 'Transaction completed successfully.')
+            return redirect('ecoswap_app:index')
+    else:
+        form = TransactionForm(initial={
+            'paid_by_user': exchange.offered_by_user,
+            'received_by_user': exchange.requested_by_user
+        })
+    return render(request, 'ecoswap_app/create_transaction.html', {'form': form})

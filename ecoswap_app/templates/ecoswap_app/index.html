@@ -36,6 +36,7 @@ Page {%endblock %} {% block additionalStyles %}
     <h2>Items:</h2>
     <div class="item-container">
       {% for item in items %}
+          {% if item.item_status == 'Available' %}
       <a href="{% url 'ecoswap_app:item_detail' item.id %}" class="item-link">
         <div class="item-box">
           <p><strong>Owner:</strong> {{ item.user.username }}</p>
@@ -46,6 +47,7 @@ Page {%endblock %} {% block additionalStyles %}
           <p><strong>Created At:</strong> {{ item.created_at }}</p>
         </div>
       </a>
+          {% endif %}
       {% endfor %}
     </div>
   </div>

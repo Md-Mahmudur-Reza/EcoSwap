@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth.views import LogoutView
 
 from . import views
+# from . import exchangeView
 
 
 app_name = 'ecoswap_app'
@@ -27,4 +28,6 @@ urlpatterns = [
     path('exchange_requests/', views.user_exchange_requests, name='user_exchange_requests'),
     path('exchange/<int:exchange_id>/accept/', views.accept_request, name='accept_request'),
     path('exchange/<int:exchange_id>/reject/', views.reject_request, name='reject_request'),
+    path('exchange/<int:exchange_id>/create_transaction/', views.create_transaction, name='create_transaction'),
+    path('item/<int:item_id>/request_exchange/', views.request_exchange, name='request_exchange'),
 ]

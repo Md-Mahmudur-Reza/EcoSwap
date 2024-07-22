@@ -48,12 +48,19 @@ class Item(models.Model):
         ('Others', 'Others')
     ]
 
+    STATUS_CHOICES = [
+        ('Available', 'Available'),
+        ('Pending', 'Pending'),
+        ('Exchanged', 'Exchanged')
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item_name = models.CharField(max_length=100)
     item_description = models.TextField(blank=True, null=True)
     item_category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     item_condition = models.CharField(max_length=10, choices=CONDITION_CHOICES)
     item_value = models.DecimalField(max_digits=10, decimal_places=2)
+    item_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Available')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
