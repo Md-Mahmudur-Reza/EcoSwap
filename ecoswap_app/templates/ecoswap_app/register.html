@@ -1,10 +1,14 @@
 <!-- ecoswap_app/templates/ecoswap_app/register.html -->
 
-{% extends "ecoswap_app/base.html" %} {% block title %}Register{% endblock %}
-{%block content %}
-<h2>Register</h2>
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title%}
+Register{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/registration.css' %}" />
+{% endblock %} {%block content %}
+<div class="container">
+  <h2>Register</h2>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Register</button>
+  </form>
+</div>
 {% endblock %}
