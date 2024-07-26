@@ -132,24 +132,35 @@ User = get_user_model()
 
 @login_required
 def message_list(request):
-    messages = Message.objects.filter(receiver_user=request.user).order_by('-sent_at')
+    # Fetch both received and sent messages
+    messages_received = Message.objects.filter(receiver_user=request.user).order_by('-sent_at')
+    messages_sent = Message.objects.filter(sender_user=request.user).order_by('-sent_at')
+    messages = messages_received | messages_sent  # Combine both querysets
+
     return render(request, 'ecoswap_app/message_list.html', {'messages': messages})
 
 @login_required
 def send_message(request, exchange_id):
     exchange = get_object_or_404(Exchange, id=exchange_id)
     if request.method == 'POST':
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST, user=request.user)
         if form.is_valid():
             message = form.save(commit=False)
             message.sender_user = request.user
             message.exchange = exchange
+            
+            # Determine the receiver user based on the exchange details
+            if exchange.offered_by_user == request.user:
+                message.receiver_user = exchange.requested_by_user
+            else:
+                message.receiver_user = exchange.offered_by_user
+
             message.save()
             return redirect('ecoswap_app:message_list')
     else:
-        form = MessageForm()
-    return render(request, 'ecoswap_app/send_message.html', {'form': form, 'exchange': exchange})
+        form = MessageForm(user=request.user)
 
+    return render(request, 'ecoswap_app/send_message.html', {'form': form, 'exchange': exchange})
 
 @login_required
 def exchange_list(request):

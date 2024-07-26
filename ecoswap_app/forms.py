@@ -49,6 +49,13 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['receiver_user', 'message_text']
 
+ # can not message themselves
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')  # Extract the current user
+        super().__init__(*args, **kwargs)
+        # Exclude the current user from the receiver_user choices
+        self.fields['receiver_user'].queryset = User.objects.exclude(id=user.id)
+
 
 class TransactionForm(forms.ModelForm):
     class Meta:
