@@ -1,0 +1,37 @@
+/* ecoswap_app/static/ecoswap_app/css/form.css */
+
+.form-container {
+  width: 50%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-container h2 {
+  text-align: center;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container form p {
+  margin-bottom: 15px;
+}
+
+.form-container form button {
+  align-self: center;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-container form button:hover {
+  background-color: #45a049;
+}

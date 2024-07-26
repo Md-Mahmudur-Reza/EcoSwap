@@ -1,0 +1,27 @@
+.items-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.item-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.item-box h3 {
+  margin-top: 0;
+}
+
+.item-box a {
+  color: #4caf50;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.item-box a:hover {
+  text-decoration: underline;
+}

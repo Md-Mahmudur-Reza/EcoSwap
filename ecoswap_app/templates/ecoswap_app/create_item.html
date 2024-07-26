@@ -1,0 +1,12 @@
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title %}Create
+Item{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/form.css' %}" />
+{% endblock %} {% block content %}
+<div class="form-container">
+  <h2>Create Item</h2>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Create Item</button>
+  </form>
+</div>
+{% endblock %}
