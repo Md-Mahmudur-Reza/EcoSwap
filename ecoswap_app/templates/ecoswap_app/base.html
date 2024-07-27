@@ -16,9 +16,8 @@
         <p>Welcome, {{ user.username }}!</p>
         <a href="{% url 'ecoswap_app:profile' %}">Profile</a>
         <a href="{% url 'ecoswap_app:user_items' %}">My Items</a>
-         <a href="{% url 'ecoswap_app:send_message' exchange_id=1 %}">Chat</a>   
         <a href="{% url 'ecoswap_app:message_list' %}">Messages</a>
-            
+
         <a href="{% url 'ecoswap_app:create_item' %}">Create Item</a>
         <a href="{% url 'ecoswap_app:user_exchange_requests' %}">
           Exchange Requests {{ exchange_request_count }}
@@ -30,7 +29,7 @@
         {% endif %}
       </div>
     </div>
- 
-     {% block content %}{% endblock %}
+
+    {% block content %}{% endblock %}
   </body>
 </html>

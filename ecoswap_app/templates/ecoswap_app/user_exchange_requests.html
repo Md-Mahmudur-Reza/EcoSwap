@@ -29,6 +29,9 @@ Exchange Requests{% endblock %} {% block additionalStyles %}
         {% csrf_token %}
         <button type="submit">Reject</button>
       </form>
+      <a href="{% url 'ecoswap_app:send_message' exchange_id=request.id %}"
+        >Chat</a
+      >
     </li>
     {% empty %}
     <li>No exchange requests.</li>

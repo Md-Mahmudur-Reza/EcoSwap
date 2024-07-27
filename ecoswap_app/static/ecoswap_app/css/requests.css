@@ -38,7 +38,7 @@
 .requests-container ul li a {
   color: #4caf50;
   text-decoration: none;
-  margin-right: 10px;
+  margin: auto;
 }
 
 .requests-container ul li a:hover {
