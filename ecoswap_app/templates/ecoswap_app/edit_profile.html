@@ -1,0 +1,12 @@
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block title %} Edit
+Profile{% endblock %} {% block additionalStyles %}
+<link rel="stylesheet" href="{% static 'ecoswap_app/css/edit_profile.css' %}" />
+{% endblock %} {% block content %}
+<div class="edit-profile-container">
+  <h2>Edit Profile</h2>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+</div>
+{% endblock %}

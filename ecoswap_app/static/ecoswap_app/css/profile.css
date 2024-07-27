@@ -39,3 +39,21 @@ h2 {
   font-weight: bold;
   color: #333;
 }
+
+.edit-profile-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-profile-button:hover {
+  background-color: #45a049;
+}

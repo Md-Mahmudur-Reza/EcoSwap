@@ -11,5 +11,6 @@ Profile {% endblock %} {% block additionalStyles %}
   <p>Phone Number: {{ user.phone_number }}</p>
   <p>Address: {{ user.address }}</p>
   <p>Joined on: {{ user.created_at }}</p>
+    <a href="{% url 'ecoswap_app:edit_profile' %}" class="edit-profile-button">Edit Profile</a>
 </div>
 {% endblock %}

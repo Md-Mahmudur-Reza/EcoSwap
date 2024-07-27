@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Item, Exchange, Transaction, Message
-from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm, ExchangeForm, TransactionForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ItemForm, ExchangeForm, TransactionForm,CustomUserChangeForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -201,6 +201,19 @@ def profile(request):
         messages.info(request, "You need to log in to view your profile.")
         return redirect('ecoswap_app:login')
     return render(request, 'ecoswap_app/profile.html', {'user': request.user})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('ecoswap_app:profile')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+
+    return render(request, 'ecoswap_app/edit_profile.html', {'form': form})
 
 def user_logout(request):
     logout(request)
