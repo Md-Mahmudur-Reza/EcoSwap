@@ -11,5 +11,5 @@ __pycache__/
 *.egg
 media/
 /ecoswap_env
-.idea
+/.idea
 ```
