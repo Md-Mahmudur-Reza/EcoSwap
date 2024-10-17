@@ -1,18 +1,16 @@
-{% extends "ecoswap_app/base.html" %} 
-{% load static %}
-{% block additionalStyles %}
+{% extends "ecoswap_app/base.html" %} {% load static %} {% block
+additionalStyles %}
 <link rel="stylesheet" href="{% static 'ecoswap_app/css/messages.css' %}" />
-{% endblock %} 
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container">
   <h2>Messages</h2>
   <ul class="message-list">
     {% for message in messages %}
-      <li>
-        <strong>{{ message.sender_user.username }}:</strong> {{ message.message_text }}
-        <em>{{ message.sent_at }}</em>
-      </li>
+    <li>
+      <strong>{{ message.sender_user.username }}:</strong> {{
+      message.message_text }}
+      <em>{{ message.sent_at }}</em>
+    </li>
     {% endfor %}
   </ul>
 </div>

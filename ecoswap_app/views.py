@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
+from datetime import timedelta
 #chatbox
 from django.contrib.auth import get_user_model
 from .models import Exchange, Message
@@ -190,6 +191,8 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                request.session.set_expiry(timedelta(days=1))
+                request.session['username'] = user.username
                 return redirect('ecoswap_app:index')
     else:
         form = CustomAuthenticationForm()
